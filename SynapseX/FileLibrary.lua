@@ -26,6 +26,7 @@ Documentation:
         *File:Create(Type: <String>) -> Void --Creates the file if it does not exist
         *File:Delete() -> Void --Deletes the file if it exists, the "File" object will not be deleted
         *File:IsValidPath() -> Boolean --Returns true if the file is a valid path (if it exists)
+        *File:GetFiles() -> Table --Returns a table of "File" objects inside of the "File" object (If it's a folder)
 
 ]]
 local FileSystem = {
@@ -69,7 +70,17 @@ local FileSystem = {
             elseif IsFile then
                 delfile(self.Path)
             end
-        end
+        end,
+        GetFiles = function(self)
+            if not self:IsValidPath() then return end
+            if not self:IsFolder() then return end
+            local RawFiles = listfiles(self.Path)
+            local Files = {}
+            for k,v in pairs(RawFiles) do
+                Files[k] = FileSystem.new(v)
+            end
+            return Files
+        end,
     }
 }
 
@@ -141,8 +152,5 @@ function FileSystem.new(Path)
     return NewFile
 end
 
-local File = FileSystem.new("test.lua")
-File:Create("File")
-File:SetSource("print(\"Hello, world!\")")
-print(File.Name,File.Type)
-print(FIle:GetSource())
+local ChatSettings = FileSystem.new("ChatSystemSettings.json")
+local ChatScripts = FileSystem.new("ChatSystemScripts")
