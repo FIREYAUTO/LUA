@@ -31,7 +31,6 @@ Documentation:
 ]]
 local FileSystem = {
     Cache={},
-    BannedSets={"Name","Type","Path","GetSource","SetSource","IsFolder","IsFile","IsValidPath","IsNew","Create","Delete"}
     FileMethods={
         GetSource = function(self)
             if not self:IsValidPath() then return end
@@ -133,12 +132,7 @@ function FileSystem.new(Path)
     local NewFile = setmetatable({},{
         __index=Proxy,
         __newindex=function(self,Name,Value)
-            for k,v in pairs(FileSystem.BannedSets) do
-                if v == Name then
-                    return error(("Cannot set property %q in File!"):format(v))
-                end
-            end
-            rawset(Proxy,Name,Value)
+            return error(("Cannot set property %q in File!"):format(v))
         end,
         __eq=function(self,Value)
             return rawequal(self,Value) or rawequal(Proxy,Value)
@@ -154,3 +148,5 @@ end
 
 local ChatSettings = FileSystem.new("ChatSystemSettings.json")
 local ChatScripts = FileSystem.new("ChatSystemScripts")
+ChatSettings:Create("File")
+ChatScripts:Create("Folder")
