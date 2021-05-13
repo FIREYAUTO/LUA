@@ -26,7 +26,7 @@ function AI.populate(Table)
     Table.Data = {
         Success=0,
         Generation=0,
-        MutationChance=1/2,
+        MutationChance=1/10,
         NodeChangeChance=1/2,
     }
 end
@@ -176,7 +176,7 @@ function AI:RearrangeNodeKeys(Node,Diff)
                 self:EditAttribute(Node,Attribute[#Attribute],Attribute[1])
             end
         end
-        self.LastAdded[Node] = self:Copy(self.Nodes[Node])
+        self.LastAdded[Node] = {Diff,self:Copy(self.Nodes[Node])}
     end
 end
 
@@ -199,7 +199,7 @@ a:AddNodeInput(function()
             print(num,Diff)
         end
         Rounds = Rounds + 1
-        if Rounds > 10 then
+        if Rounds > 20 then
             a:Stop()
         end
         print("----- ROUND ENDED -----")
