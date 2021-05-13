@@ -185,6 +185,7 @@ end
 -- // Testing \\ --
 
 local num = 0
+local mnum = 30
 local a = AI.new()
 
 a:AddNodeInput(function()
@@ -199,7 +200,7 @@ a:AddNodeInput(function()
             print(num,Diff)
         end
         Rounds = Rounds + 1
-        if Rounds > 20 then
+        if Rounds > 50 then
             a:Stop()
         end
         print("----- ROUND ENDED -----")
@@ -211,12 +212,12 @@ end)
 local n = a:AddNode()
 
 a:AddInput(n,function(v,k)
-    if num > 10 then return false end
+    if num > mnum then return false end
     num = num + 1
     return true
 end)
 a:AddInput(n,function(v,k)
-    if num > 10 then return false end
+    if num > mnum then return false end
     num = num + 1
     return true
 end)
@@ -226,13 +227,13 @@ end)
 local n2 = a:AddNode()
 
 a:AddInput(n2,function(v,k)
-    if num > 10 then return false end
+    if num > mnum then return false end
     num = num + 1
     return true
 end)
 
 a:AddInput(n2,function(v,k)
-    if num > 10 then return false end
+    if num > mnum then return false end
     if a:TryMutation() then
         num = 0
     end
