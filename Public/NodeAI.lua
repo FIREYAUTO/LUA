@@ -162,18 +162,15 @@ function AI:RearrangeNodeKeys(Node,Diff)
         local Attribute = self:GetAttribute(Node)
         if LastNode then
             if LastNode[1] < Diff then
-                local RN2 = math.floor(self:RandomNumber()*2)+1
+                local RN2 = math.floor(self:RandomNumber()*4)+1
                 for i=1,RN2 do
                     if RN2 > #Attribute then break end
                     self:AddInput(Node,Attribute[#Attribute-(i-1)])
                 end
-                if RN2 > #Attribute then
-                    self:AddInput(Node,Attribute[#Attribute])
-                end
             elseif LastNode[1] == Diff then
                 self:AddInput(Node,Attribute[#Attribute])
-            elseif LastNode[1] < Diff then
-                self:EditAttribute(Node,Attribute[#Attribute],Attribute[1])
+            elseif LastNode[1] > Diff then
+                self:EditAttribute(Node,Attribute[#Attribute],Attribute[#Attribute-1])
             end
         end
         self.LastAdded[Node] = {Diff,self:Copy(self.Nodes[Node])}
@@ -184,8 +181,10 @@ end
 
 -- // Testing \\ --
 
-local num = 0
-local mnum = 30
+local num = 100
+local snum = num
+local mnum = 0
+local inum = -1
 local a = AI.new()
 
 a:AddNodeInput(function()
@@ -197,10 +196,10 @@ a:AddNodeInput(function()
             a:FireNode(k)
             local Diff = a.Data.Success - Success
             a:RearrangeNodeKeys(k,Diff)
-            print(num,Diff)
+            print(num,Diff,a.Data.Success)
         end
         Rounds = Rounds + 1
-        if Rounds > 50 then
+        if Rounds > 100 then
             a:Stop()
         end
         print("----- ROUND ENDED -----")
@@ -212,13 +211,13 @@ end)
 local n = a:AddNode()
 
 a:AddInput(n,function(v,k)
-    if num > mnum then return false end
-    num = num + 1
+    if num < mnum then return false end
+    num = num + inum
     return true
 end)
 a:AddInput(n,function(v,k)
-    if num > mnum then return false end
-    num = num + 1
+    if num < mnum then return false end
+    num = num + inum
     return true
 end)
 
@@ -227,15 +226,15 @@ end)
 local n2 = a:AddNode()
 
 a:AddInput(n2,function(v,k)
-    if num > mnum then return false end
-    num = num + 1
+    if num < mnum then return false end
+    num = num + inum
     return true
 end)
 
 a:AddInput(n2,function(v,k)
-    if num > mnum then return false end
+    if num < mnum then return false end
     if a:TryMutation() then
-        num = 0
+        num = snum
     end
     return true
 end)
