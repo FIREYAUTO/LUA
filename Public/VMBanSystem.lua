@@ -3,6 +3,7 @@
 TODO: Fix Stack so it inherits functions of previous stack, this will allow you to name functions the same while in different stacks
 
 Add another key to the stack called "Functions", which will be a metatable with __index returning everything in the previous stack functions
+Will be required to update the "call" and "getfunc" tokens to work properly
 
 ]]
 
