@@ -42,6 +42,14 @@ local VMTable = {
         {"rawcall",{"index",{"global","table"},"insert"},{"get","Banned"},{"get","Username"}},
     }},
     {"call","AddCommand",{"ban"},{"getfunc","Ban"}},
+    {"def","Unban",{"Player","Args"},{
+        {"new","Username",{"index",{"get","Args"},1}},
+        {"new","Found",{"call","Find",{"get","Banned"},{"get","Username"}}},
+        {"if",{"get","Found"},{
+            {"rawcall",{"index",{"global","table"},"remove"},{"get","Banned"},{"get","Found"}},
+        }},
+    }},
+    {"call","AddCommand",{"unban"},{"getfunc","Unban"}},
     {"new","Players",{"selfcall",{"global","game"},"GetService","Players"}},
     {"def","Joined",{"Player"},{
         {"if",{"call","Find",{"get","Whitelisted"},{"index",{"get","Player"},"Name"}},{
